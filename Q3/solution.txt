@@ -1,0 +1,12 @@
+with cte_1 as (
+    select owner_id, owner_name, article_id
+    from owner inner join article on owner.owner_id = article.owner_id
+)
+cte_2 as (
+    select owner_id, owner_name, category_id
+    from cte_1 inner join category_article_mapping on cte_1.article_id = category_article_mapping.article_id
+)
+select owner_id, owner_name, count(category_id) as different_category_count
+from category inner join cte_2 on category.category_id = cte_2.category_id
+group by owner_id, owner_name
+order by different_category_count dsct
